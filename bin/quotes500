@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+# require "bundler/setup"
+require "quotes500"
+require "nokogiri"
+if ARGV.empty?
+  Quotes500.execute(10)
+else
+  if ARGV.length > 1
+    abort "\n Error: the number of arguments shouldn't be greater than 1"
+  else
+    quote_number = ARGV[0].to_i
+    case quote_number
+    when 0
+      abort "\n Error: 0 is not allowed"
+    when 1..50
+      Quotes500.execute(quote_number)
+    when quote_number > 50
+      abort "\n Error: Specify from 1 to 50"
+    end
+  end
+end

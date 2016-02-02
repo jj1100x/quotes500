@@ -1,5 +1,5 @@
 require "quotes500/version"
-require "open-uri"
+# require "nokogiri"
 
 module Quotes500
   BASE_URL = "http://www.quotery.com/lists/top-500-greatest-quotes-of-all-time/"
@@ -17,6 +17,7 @@ module Quotes500
 # HTMLParser loads a html source file from url, parsing data you need
 #
   class HTMLParser
+    require "open-uri"
     SELECTOR_AUTHOR = "div.blog-quote__author"
     SELECTOR_AUTHOR_IMG_URL = "div.blog-quote__author img"
     SELECTOR_RANK = "div.blog-quote__count span"
@@ -49,18 +50,17 @@ module Quotes500
           @quotes << quote
         end
       else
-        puts "noooo"
+        puts "no"
       end
-
     end
   end
 
-  TOTAL_PAGE = 1
+  # TOTAL_PAGE = 20
 
-  def self.allQuotes
+  def self.allQuotes(quoteSet)
     require 'json'
     totalQuotes = []
-    TOTAL_PAGE.times do |i|
+    quoteSet.times do |i|
       page = i+1
       parser = HTMLParser.new(BASE_URL, page)
       parser.retrieveQuotes
@@ -69,18 +69,22 @@ module Quotes500
     return totalQuotes
   end
 
-  def self.convertToJSON
+  def self.convertToJSON(set)
     require 'json'
-    rootObj = {:quotes => self.allQuotes}
+    rootObj = {:quotes => self.allQuotes(set)}
     # json = self.allQuotes.to_json
     json = JSON.pretty_generate(rootObj)
     return json
   end
 
-  def self.generateJSON
+  def self.generateJSON(quoteSet)
     File.open("temp.json", "w") do |f|
-      f.write(self.convertToJSON)
+      f.write(self.convertToJSON(quoteSet))
     end
+  end
+
+  def self.execute(quoteSet)
+    self.generateJSON(quoteSet)
   end
 
   def self.createTargetUrl

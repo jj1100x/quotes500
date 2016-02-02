@@ -26,8 +26,8 @@ class Quotes500Test < Minitest::Test
   end
 
   def test_getTotalQuotes
-    assert Quotes500::allQuotes
-    assert_equal 10, Quotes500::allQuotes.length
+    assert Quotes500::allQuotes(5)
+    assert_equal 50, Quotes500::allQuotes(5).length
   end
 
   def test_convertToJSON
@@ -40,7 +40,6 @@ class Quotes500Test < Minitest::Test
   end
 
   def test_getQuoteSet
-
     assert_equal 10, loadLocalHtmlSource.css('div.blog-quote').count
   end
 
